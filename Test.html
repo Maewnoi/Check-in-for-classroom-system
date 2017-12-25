@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<title>หน้าหลัก</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<style>
+body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
+body, html {
+    height: 100%;
+    line-height: 1.8;
+}
+/* Full height image header */
+.bgimg-1 {
+    background-position: center;
+    background-size: cover;
+    background-image: url("/w3images/mac.jpg");
+    min-height: 100%;
+}
+.w3-bar .w3-button {
+    padding: 16px;
+}
+</style>
+<body>
+
+<!-- Navbar (sit on top) -->
+<div class="w3-top">
+  <div class="w3-bar w3-white w3-card" id="myNavbar">
+    <a href="#" class="w3-bar-item w3-button w3-wide">Check in for classroom system</a>
+    <!-- Right-sided navbar links -->
+    <div class="w3-right w3-hide-small">
+      
+
+
+      <a href="login_2.php" class="w3-bar-item w3-button">Login</a>
+      <a href="SingUp.php" class="w3-bar-item w3-button">Sing Up</a>
+    <!-- Hide right-floated links on small screens and replace them with a menu icon -->
+     
+    <a href="javascript:void(0)" class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium" onclick="w3_open()">
+      <i class="fa fa-bars"></i>
+    </a>
+  </div>
+</div>
+
+<!-- Sidebar on small screens when clicking the menu icon -->
+<nav class="w3-sidebar w3-bar-block w3-black w3-card w3-animate-left w3-hide-medium w3-hide-large" style="display:none" id="mySidebar">
+  <a href="javascript:void(0)" onclick="w3_close()" class="w3-bar-item w3-button w3-large w3-padding-16">Close ×</a>
+  <a href="login_form.php" class="w3-bar-item w3-button">Login</a>
+      <a href="SingUp.php" class="w3-bar-item w3-button">Sign Up</a>
+
+</nav>
+
+<div class="w3-container  w3-margin-top">
+  <center>
+    <img src="logo.png" style="width:25%" class="w3-circle w3-margin-top">
+    <h2>Check in for classroom system</h2>
+    <h4>เว็บไซต์ที่จะช่วยจัดเก็บรายชื่อนักเรียนนักศึกษา สำหรับครูและอาจารย์</h4>
+    <hr>
+</div>
+
+<div align = "center">
+<fb:login-button
+      scope="public_profile,email"
+      onlogin="checkLoginState();">
+      </fb:login-button>
+
+<form action="check.php" method="post" name="frmMain" id="frmMain">
+  <input type="hidden" id="hdnFbID" name="hdnFbID">
+  <input type="hidden" id="hdnName" name="hdnName">
+  <input type="hidden" id="hdnEmail" name="hdnEmail">
+</form>
+</div>
+
+<script>
+
+  var bFbStatus = false;
+  var fbID = "";
+  var fbName = "";
+  var fbEmail = "";
+
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '368318706926701',
+      cookie     : true,
+      xfbml      : true,
+      version    : 'v2.11'
+    });
+    FB.AppEvents.logPageView();
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+
+
+function statusChangeCallback(response)
+{
+
+    if(bFbStatus == false)
+    {
+      fbID = response.authResponse.userID;
+
+        if (response.status == 'connected') {
+        getCurrentUserInfo(response)
+        } else {
+        FB.login(function(response) {
+          if (response.authResponse){
+          getCurrentUserInfo(response)
+          } else {
+          console.log('Auth cancelled.')
+          }
+        }, { scope: 'email' });
+        }
+    }
+
+
+    bFbStatus = true;
+}
+
+
+    function getCurrentUserInfo() {
+      FB.api('/me?fields=name,email', function(userInfo) {
+
+      fbName = userInfo.name;
+      fbEmail = userInfo.email;
+
+      $("#hdnFbID").val(fbID);
+      $("#hdnName ").val(fbName);
+      $("#hdnEmail").val(fbEmail);
+      $("#frmMain").submit();
+
+      });
+    }
+
+function checkLoginState() {
+  FB.getLoginStatus(function(response) {
+    statusChangeCallback(response);
+  });
+}
+
+
+</script>
+
+
+</body>
+</html>
